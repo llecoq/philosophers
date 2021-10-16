@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/04 14:59:21 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/16 14:22:24 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/16 19:41:16 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ enum	e_status
 	EATING,
 	SLEEPING,
 	THINKING,
+	TIME_TO_DIE,
 };
 
 enum	e_erros
@@ -62,6 +63,8 @@ enum	e_erros
 
 enum	e_actions
 {
+	EAT,
+	SLEEP,
 	HAS_TAKEN_A_FORK,
 	IS_EATING,
 	IS_SLEEPING,
@@ -78,28 +81,32 @@ enum	e_digit
 typedef struct s_parameters
 {
 	int				nb_of_philosophers;
+	int				status;
 	long			time_to_die;
 	long			time_to_eat;
 	long			time_to_sleep;
 	long			nb_of_meals;
 	long			starting_time;
+	long			timestamp;
 }					t_parameters;
 
 typedef struct s_philosopher
 {
-	t_parameters	*parameters;
 	pthread_t		id;
 	pthread_mutex_t	fork;
 	pthread_mutex_t	*next_fork;
+	t_parameters	*parameters;
 	int				philosopher_nb;
 	int				philosopher_status;
 	int				nb_of_meals_to_eat;
+	long			timestamp;
+	long			last_meal_time;
 }					t_philosopher;
 
 /* ------------------EXECUTION------------------ */
 int		execution(t_parameters *parameters);
-void	philo_sleep(t_philosopher *philosopher, long starting_time, long time_to_sleep);
-void	philo_eat(t_philosopher *philosopher, long starting_time, long time_to_eat);
+void	philo_sleep(t_philosopher *philosopher);
+void	philo_eat(t_philosopher *philosopher);
 
 /* -------------------PARSING------------------- */
 
@@ -112,8 +119,8 @@ int		error_clear(t_parameters *parameters, int error_type, char *str);
 int		clear_memory(t_parameters *parameters, int error_type);
 int		calloc_philosopher_struct(t_parameters *parameters);
 long	ft_atoi(const char *str);
-long	oversleep_is_for_the_weak(long starting_time, long timestamp, long sleep_time);
-long	get_timestamp(long starting_time);
-void	print_action(long timestamp, int philosopher_nb, int action);
+long	get_timestamp(t_parameters *parameters,long starting_time);
+void	oversleep_is_for_the_weak(t_philosopher *philosopher, long sleep_time);
+void	print_action(t_philosopher *philosopher, int philosopher_nb, int action);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 11:29:01 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/17 12:29:02 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/17 17:18:20 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	print_action(t_philosopher *philosopher, int philosopher_nb, int action)
 	timestamp = philosopher->parameters->timestamp;
 	philosopher->timestamp = timestamp;
 	str = NULL;
+	if (philosopher->parameters->status == DEAD)
+		return ;
 	if (action == HAS_TAKEN_A_FORK)
 		str = WHITE"has taken a fork"RESET;
 	else if (action == IS_EATING)
@@ -32,8 +34,9 @@ void	print_action(t_philosopher *philosopher, int philosopher_nb, int action)
 	else if (action == IS_THINKING)
 		str = CYAN"is thinking"RESET;
 	else if (action == DIED)
+	{
+		philosopher->parameters->status = DEAD;
 		str = RED"died"RESET;
-	if (philosopher->parameters->status == DEAD)
-		return ;
+	}
 	printf("%05ld\t%-5d %s\n", timestamp, philosopher_nb, str);
 }

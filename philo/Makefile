@@ -6,7 +6,7 @@
 #    By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/04 14:53:59 by llecoq            #+#    #+#              #
-#    Updated: 2021/10/17 12:23:56 by llecoq           ###   ########.fr        #
+#    Updated: 2021/10/17 17:53:50 by llecoq           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,10 +17,10 @@ SRCS_FILES	=	main.c\
 				utils/print_action.c\
 				utils/sleep.c\
 				utils/time.c\
+				utils/death.c\
 				parsing/parser.c\
 				execution/executor.c\
 				execution/actions.c
-# utils/calloc_philo_struct.c
 
 SRCSPATH= srcs/
 
@@ -38,7 +38,8 @@ CC		= gcc
 
 RM		= rm -rf
 
-CFLAGS	= -Wall -Wextra -Werror -g -pthread -fsanitize=address
+CFLAGS	= -Wall -Wextra -Werror -g -pthread 
+# -fsanitize=thread
 
 DIR		=	.objs/parsing\
 DIR		=	.objs/execution\

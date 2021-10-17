@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 11:53:14 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/17 13:05:02 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/17 17:54:22 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	init_philosopher(t_philosopher *philo, t_parameters *parameters)
 {
 	int	i;
 	int nb_of_philosophers;
-
 	nb_of_philosophers = parameters->nb_of_philosophers;
 	i = -1;
 	while (++i < nb_of_philosophers)
@@ -53,7 +52,7 @@ void	*philosophize_or_die(void *arg)
 	wait_for_all_threads(philosopher);
 	if (philosopher->philosopher_nb % 2 > 0)
 		usleep(500);
-	while (philosopher->philosopher_status != DEAD)
+	while (philosopher->parameters->status != DEAD)
 	{
 		if (philosopher->parameters->status == DEAD)
 			break ;
@@ -63,16 +62,6 @@ void	*philosophize_or_die(void *arg)
 	}
 	return (NULL);
 }
-
-// void	death_checker(t_parameters *parameters)
-// {
-// 	while (1)
-// 	{
-// 		if (parameters->status == DEAD)
-// 			break ;
-// 		usleep(9000);
-// 	}
-// }
 
 // refaire la sync des threads ?
 int	execution(t_parameters *parameters)
@@ -89,13 +78,11 @@ int	execution(t_parameters *parameters)
 			// return (error(PTHREAD FAILED));
 			return (EXECUTION_ERROR);
 	}
-	set_starting_time(parameters);
-	run_timestamp(parameters);
-	// death_checker(parameters);
-	while (--i >= 0)
-	{
-		if (pthread_join(philo[i].id, NULL) >= FAILED)
-			return (EXECUTION_ERROR);
-	}
+	death_vs_time((t_philosopher *)&philo, parameters);
+	// while (--i >= 0)
+	// {
+	// 	if (pthread_join(philo[i].id, NULL) >= FAILED)
+	// 		return (EXECUTION_ERROR);
+	// }
 	return (EXIT_SUCCESS);
 }

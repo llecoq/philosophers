@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/04 15:01:54 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/16 19:41:33 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/17 12:33:07 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	init_parameters(t_parameters *parameters)
 {
-	// parameters->philosopher = NULL;
 	parameters->nb_of_philosophers = 0;
 	parameters->status = ALIVE;
 	parameters->time_to_die = 0;

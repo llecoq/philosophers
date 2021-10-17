@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 11:53:14 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/16 20:02:03 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/17 13:05:02 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	init_philosopher(t_philosopher *philo, t_parameters *parameters)
 
 	nb_of_philosophers = parameters->nb_of_philosophers;
 	i = -1;
-	while (++i <= nb_of_philosophers)
+	while (++i < nb_of_philosophers)
 	{
 		philo[i].parameters = parameters;
 		philo[i].timestamp = 0;
@@ -33,36 +33,16 @@ void	init_philosopher(t_philosopher *philo, t_parameters *parameters)
 			return ;
 		}
 	}
-	philo[--i].next_fork = &philo[1].fork;
-	while (--i > 0)
+	philo[--i].next_fork = &philo[0].fork;
+	while (--i >= 0)
 		philo[i].next_fork = &philo[i + 1].fork;
 }
 
-void	set_starting_time(t_parameters *parameters)
+void	wait_for_all_threads(t_philosopher *philosopher)
 {
-	struct timeval	time;
-	
-	if (gettimeofday(&time, NULL) == -1)
-		return ; // zob erreur
-	parameters->starting_time = time.tv_sec * 1000000 + time.tv_usec;
-	parameters->starting_time *= 0.001;
-}
-
-void	run_timestamp(t_parameters *parameters)
-{
-	struct timeval	time;
-	long			timestamp;
-	long			starting_time;
-
-	starting_time = parameters->starting_time;
 	while (1)
-	{
-		if (gettimeofday(&time, NULL) == -1)
-			return ; // zob erreur
-		timestamp = (time.tv_sec * 1000000 + time.tv_usec) * 0.001 - starting_time;
-		parameters->timestamp = timestamp;
-		usleep(800);
-	}
+		if (philosopher->parameters->starting_time >= IS_SET)
+			break ;
 }
 
 void	*philosophize_or_die(void *arg)
@@ -70,11 +50,9 @@ void	*philosophize_or_die(void *arg)
 	t_philosopher	*philosopher;
 
 	philosopher = (t_philosopher *)arg;
-	if (philosopher->philosopher_nb == 0)
-		run_timestamp(philosopher->parameters);
-	if (philosopher->philosopher_nb % 2 == 0)
+	wait_for_all_threads(philosopher);
+	if (philosopher->philosopher_nb % 2 > 0)
 		usleep(500);
-	// usleep(philosopher->philosopher_nb * 100);
 	while (philosopher->philosopher_status != DEAD)
 	{
 		if (philosopher->parameters->status == DEAD)
@@ -86,15 +64,15 @@ void	*philosophize_or_die(void *arg)
 	return (NULL);
 }
 
-void	death_checker(t_parameters *parameters)
-{
-	while (1)
-	{
-		if (parameters->status == DEAD)
-			break ;
-		usleep(105000);
-	}
-}
+// void	death_checker(t_parameters *parameters)
+// {
+// 	while (1)
+// 	{
+// 		if (parameters->status == DEAD)
+// 			break ;
+// 		usleep(9000);
+// 	}
+// }
 
 // refaire la sync des threads ?
 int	execution(t_parameters *parameters)
@@ -103,16 +81,17 @@ int	execution(t_parameters *parameters)
 	t_philosopher	philo[400];
 
 	init_philosopher((t_philosopher *)&philo, parameters);
-	set_starting_time(parameters);
 	i = -1;
-	while (++i <= parameters->nb_of_philosophers)
+	while (++i < parameters->nb_of_philosophers)
 	{
 		if (pthread_create(&philo[i].id, NULL, &philosophize_or_die, &philo[i])
 			>= FAILED)
 			// return (error(PTHREAD FAILED));
 			return (EXECUTION_ERROR);
 	}
-	death_checker(parameters);
+	set_starting_time(parameters);
+	run_timestamp(parameters);
+	// death_checker(parameters);
 	while (--i >= 0)
 	{
 		if (pthread_join(philo[i].id, NULL) >= FAILED)

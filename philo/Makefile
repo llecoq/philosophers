@@ -6,7 +6,7 @@
 #    By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/04 14:53:59 by llecoq            #+#    #+#              #
-#    Updated: 2021/10/16 14:08:52 by llecoq           ###   ########.fr        #
+#    Updated: 2021/10/17 12:23:56 by llecoq           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ SRCS_FILES	=	main.c\
 				utils/ft_atoi.c\
 				utils/print_action.c\
 				utils/sleep.c\
+				utils/time.c\
 				parsing/parser.c\
 				execution/executor.c\
 				execution/actions.c

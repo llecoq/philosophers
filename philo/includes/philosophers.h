@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/04 14:59:21 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/16 19:41:16 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/17 12:58:21 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,5 +122,8 @@ long	ft_atoi(const char *str);
 long	get_timestamp(t_parameters *parameters,long starting_time);
 void	oversleep_is_for_the_weak(t_philosopher *philosopher, long sleep_time);
 void	print_action(t_philosopher *philosopher, int philosopher_nb, int action);
+void	run_timestamp(t_parameters *parameters);
+void	set_starting_time(t_parameters *parameters);
+
 
 #endif

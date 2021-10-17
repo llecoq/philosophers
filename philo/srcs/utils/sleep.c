@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 14:07:40 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/16 20:03:45 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/17 13:08:14 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,13 @@ void	oversleep_is_for_the_weak(t_philosopher *philosopher, long sleep_time)
 	long	timestamp;
 
 	timestamp = philosopher->timestamp;
-	usleep(sleep_time * 500);
 	time_diff = get_time_diff(philosopher->parameters, timestamp);
-	while (time_diff < sleep_time)
+	while (philosopher->philosopher_status == ALIVE)
+	{
 		time_diff = get_time_diff(philosopher->parameters, timestamp);
+		if (time_diff >= sleep_time)
+			break;
+		usleep(100);
+	}
 	philosopher->timestamp = timestamp + sleep_time;
 }

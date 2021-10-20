@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 11:53:14 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/20 14:59:50 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/20 17:31:18 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	init_philosopher(t_philosopher *philo, t_parameters *parameters)
 		philo[i].philosopher_nb = i;
 		philo[i].philosopher_status = ALIVE;
 		philo[i].nb_of_meals_to_eat = parameters->nb_of_meals;
+		philo[i].nb_of_forks = 0;
 		philo[i].last_meal_time = 0;
 		philo[i].last_action_time = NOT_SET;
 		if (pthread_mutex_init(&philo[i].fork, NULL) >= FAILED)
@@ -44,6 +45,17 @@ void	wait_for_all_threads(t_philosopher *philosopher)
 			break ;
 }
 
+void	clean_unlock_mutex(t_philosopher *philosopher)
+{
+	if (philosopher->nb_of_forks == 1)
+		pthread_mutex_unlock(philosopher->next_fork);
+	else if (philosopher->nb_of_forks == 2)
+	{
+		pthread_mutex_unlock(&philosopher->fork);
+		pthread_mutex_unlock(philosopher->next_fork);
+	}
+}
+
 void	*philosophize_or_die(void *arg)
 {
 	t_philosopher	*philosopher;
@@ -54,13 +66,23 @@ void	*philosophize_or_die(void *arg)
 		usleep(500);
 	while (philosopher->parameters->status != DEAD)
 	{
-		if (philosopher->parameters->status == DEAD)
-			break ;
 		philo_eat(philosopher);
-		if (philosopher->philosopher_status != DEAD)
-			philo_sleep(philosopher);
+		philo_sleep(philosopher);
 	}
+	clean_unlock_mutex(philosopher);
 	return (NULL);
+}
+
+
+void	destroy_mutex(t_philosopher *philosopher, t_parameters *parameters)
+{
+	int	i;
+
+	i = -1;
+	while (++i < parameters->nb_of_philosophers)
+		if (pthread_mutex_destroy(&philosopher[i].fork) >= FAILED)
+			return ; // ZOB
+	pthread_mutex_destroy(&parameters->print_action);
 }
 
 // refaire la sync des threads ?
@@ -77,14 +99,10 @@ int	execution(t_parameters *parameters)
 			>= FAILED)
 			// return (error(PTHREAD FAILED));
 			return (EXECUTION_ERROR);
+		pthread_detach(philo[i].id);
 	}
 	set_starting_time(parameters);
-	death_monitor((t_philosopher *)&philo);
-	// death_vs_time((t_philosopher *)&philo, parameters);
-	// while (--i >= 0)
-	// {
-	// 	if (pthread_join(philo[i].id, NULL) >= FAILED)
-	// 		return (EXECUTION_ERROR);
-	// }
+	life_vs_death_monitor((t_philosopher *)&philo);
+	destroy_mutex((t_philosopher *)&philo, parameters);
 	return (EXIT_SUCCESS);
 }

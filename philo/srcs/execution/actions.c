@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 18:02:40 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/17 13:34:25 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/20 17:23:24 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,16 @@
 void	take_fork(t_philosopher *philosopher, pthread_mutex_t *fork)
 {
 	pthread_mutex_lock(fork);
+	philosopher->nb_of_forks++;
 	print_action(philosopher, philosopher->philosopher_nb, HAS_TAKEN_A_FORK);
 }
 
 void	drop_forks(t_philosopher *philosopher)
 {
 	pthread_mutex_unlock(&philosopher->fork);
+	philosopher->nb_of_forks--;
 	pthread_mutex_unlock(philosopher->next_fork);
+	philosopher->nb_of_forks--;
 }
 
 void	philo_eat(t_philosopher *philosopher)
@@ -52,6 +55,10 @@ void	philo_eat(t_philosopher *philosopher)
 	print_action(philosopher, philosopher->philosopher_nb, IS_EATING);
 	oversleep_is_for_the_weak(philosopher, philosopher->parameters->time_to_eat);
 	drop_forks(philosopher);
+	if (philosopher->parameters->nb_of_meals >= IS_SET)
+		philosopher->nb_of_meals_to_eat--;
+	if (philosopher->nb_of_meals_to_eat == 0)
+		philosopher->philosopher_status = HAS_EATEN_ALL_HIS_MEALS;
 }
 
 void	philo_sleep(t_philosopher *philosopher)

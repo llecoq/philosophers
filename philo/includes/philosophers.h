@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/04 14:59:21 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/20 15:01:19 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/20 17:22:08 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ enum	e_status
 	SLEEPING,
 	THINKING,
 	TIME_TO_DIE,
+	HAS_EATEN_ALL_HIS_MEALS,
 };
 
 enum	e_erros
@@ -99,6 +100,7 @@ typedef struct s_philosopher
 	int				philosopher_nb;
 	int				philosopher_status;
 	int				nb_of_meals_to_eat;
+	int				nb_of_forks;
 	long			last_meal_time;
 	long			last_action_time;
 }					t_philosopher;
@@ -123,7 +125,7 @@ long	get_timestamp(t_parameters *parameters);
 void	oversleep_is_for_the_weak(t_philosopher *philosopher, long sleep_time);
 void	print_action(t_philosopher *philosopher, int philosopher_nb, int action);
 void	set_starting_time(t_parameters *parameters);
-void	death_monitor(t_philosopher *philosopher);
+void	life_vs_death_monitor(t_philosopher *philosopher);
 
 
 #endif

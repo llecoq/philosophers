@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/17 13:39:07 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/20 14:40:59 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/20 17:06:56 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,11 @@ int	last_meal_time(t_philosopher philosopher, long time_to_die)
 	return (ALIVE);
 }
 
-void	death_monitor(t_philosopher *philosopher)
+void	life_vs_death_monitor(t_philosopher *philosopher)
 {
 	long			time_to_die;
 	int				nb_of_philosophers;
+	int				nb_of_philosophers_done_eating;
 	int				i;
 
 	time_to_die = philosopher[0].parameters->time_to_die;
@@ -40,8 +41,15 @@ void	death_monitor(t_philosopher *philosopher)
 	while (1)
 	{
 		i = -1;
+		nb_of_philosophers_done_eating = 0;
 		while (++i < nb_of_philosophers)
+		{
 			if (last_meal_time(philosopher[i], time_to_die) > TIME_TO_DIE)
 				break ;
+			if (philosopher[i].philosopher_status == HAS_EATEN_ALL_HIS_MEALS)
+				nb_of_philosophers_done_eating++;
+		}
+		if (nb_of_philosophers_done_eating == nb_of_philosophers)
+			break ;
 	}
 }

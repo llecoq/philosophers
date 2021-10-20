@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/04 14:59:21 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/17 17:54:26 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/20 15:01:19 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ enum	e_digit
 
 typedef struct s_parameters
 {
+	pthread_mutex_t	print_action;
 	int				nb_of_philosophers;
 	int				status;
 	long			time_to_die;
@@ -87,7 +88,6 @@ typedef struct s_parameters
 	long			time_to_sleep;
 	long			nb_of_meals;
 	long			starting_time;
-	long			timestamp;
 }					t_parameters;
 
 typedef struct s_philosopher
@@ -99,8 +99,8 @@ typedef struct s_philosopher
 	int				philosopher_nb;
 	int				philosopher_status;
 	int				nb_of_meals_to_eat;
-	long			timestamp;
 	long			last_meal_time;
+	long			last_action_time;
 }					t_philosopher;
 
 /* ------------------EXECUTION------------------ */
@@ -119,13 +119,11 @@ int		error_clear(t_parameters *parameters, int error_type, char *str);
 int		clear_memory(t_parameters *parameters, int error_type);
 int		calloc_philosopher_struct(t_parameters *parameters);
 long	ft_atoi(const char *str);
-long	get_timestamp(t_parameters *parameters,long starting_time);
+long	get_timestamp(t_parameters *parameters);
 void	oversleep_is_for_the_weak(t_philosopher *philosopher, long sleep_time);
 void	print_action(t_philosopher *philosopher, int philosopher_nb, int action);
-void	*run_timestamp(void *arg);
-void	set_starting_time(t_parameters *parameters, long *starting_time);
-void	death_vs_time(t_philosopher *philosopher, t_parameters *parameters);
-
+void	set_starting_time(t_parameters *parameters);
+void	death_monitor(t_philosopher *philosopher);
 
 
 #endif

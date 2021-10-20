@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 11:53:14 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/17 17:54:22 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/20 14:59:50 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ void	init_philosopher(t_philosopher *philo, t_parameters *parameters)
 	while (++i < nb_of_philosophers)
 	{
 		philo[i].parameters = parameters;
-		philo[i].timestamp = 0;
 		philo[i].philosopher_nb = i;
 		philo[i].philosopher_status = ALIVE;
 		philo[i].nb_of_meals_to_eat = parameters->nb_of_meals;
 		philo[i].last_meal_time = 0;
+		philo[i].last_action_time = NOT_SET;
 		if (pthread_mutex_init(&philo[i].fork, NULL) >= FAILED)
 		{
 			//clear zooob
@@ -78,7 +78,9 @@ int	execution(t_parameters *parameters)
 			// return (error(PTHREAD FAILED));
 			return (EXECUTION_ERROR);
 	}
-	death_vs_time((t_philosopher *)&philo, parameters);
+	set_starting_time(parameters);
+	death_monitor((t_philosopher *)&philo);
+	// death_vs_time((t_philosopher *)&philo, parameters);
 	// while (--i >= 0)
 	// {
 	// 	if (pthread_join(philo[i].id, NULL) >= FAILED)

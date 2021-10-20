@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/04 15:01:54 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/17 12:33:07 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/20 15:05:15 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	init_parameters(t_parameters *parameters)
 	parameters->time_to_sleep = 0;
 	parameters->nb_of_meals = NOT_SET;
 	parameters->starting_time = NOT_SET;
-	parameters->timestamp = NOT_SET;
+	if (pthread_mutex_init(&parameters->print_action, NULL) >= FAILED)
+		return ; // ZOB
 }
 
 int	main(int argc, char **argv)

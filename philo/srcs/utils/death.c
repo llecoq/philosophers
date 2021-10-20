@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/17 13:39:07 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/17 17:29:00 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/20 14:40:59 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	last_meal_time(t_philosopher philosopher, long time_to_die)
 	long	timestamp;
 	long	last_meal_time;
 
-	timestamp = philosopher.parameters->timestamp;
+	timestamp = get_timestamp(philosopher.parameters);
 	last_meal_time = philosopher.last_meal_time;
 	time_diff = timestamp - last_meal_time;
 	if (time_diff > time_to_die)
@@ -44,14 +44,4 @@ void	death_monitor(t_philosopher *philosopher)
 			if (last_meal_time(philosopher[i], time_to_die) > TIME_TO_DIE)
 				break ;
 	}
-}
-
-void	death_vs_time(t_philosopher *philosopher, t_parameters *parameters)
-{
-	pthread_t	timestamp_runner_id;
-
-	if (pthread_create(&timestamp_runner_id, NULL, &run_timestamp, parameters)
-		>= FAILED)
-		return ; // zob
-	death_monitor(philosopher);
 }

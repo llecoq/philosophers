@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 11:53:14 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/20 17:31:18 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/20 18:14:28 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	destroy_mutex(t_philosopher *philosopher, t_parameters *parameters)
 		if (pthread_mutex_destroy(&philosopher[i].fork) >= FAILED)
 			return ; // ZOB
 	pthread_mutex_destroy(&parameters->print_action);
+	pthread_mutex_destroy(&parameters->had_a_meal);
 }
 
 // refaire la sync des threads ?

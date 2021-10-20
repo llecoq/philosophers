@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 11:29:01 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/20 17:21:02 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/20 17:51:59 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ void	print_action(t_philosopher *philosopher, int philosopher_nb, int action)
 	if (philosopher->parameters->status == DEAD)
 		return ;
 	if (action == HAS_TAKEN_A_FORK)
-	{
 		str = WHITE"has taken a fork"RESET;
-		// philosopher->
-	}
 	else if (action == IS_EATING)
 	{
 		philosopher->last_meal_time = timestamp;

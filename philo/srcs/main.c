@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/04 15:01:54 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/20 16:33:35 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/20 18:03:50 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	init_parameters(t_parameters *parameters)
 {
 	parameters->nb_of_philosophers = 0;
+	parameters->nb_of_philosophers_done_eating = 0;
 	parameters->status = ALIVE;
 	parameters->time_to_die = 0;
 	parameters->time_to_eat = 0;
@@ -22,6 +23,8 @@ void	init_parameters(t_parameters *parameters)
 	parameters->nb_of_meals = NOT_SET;
 	parameters->starting_time = NOT_SET;
 	if (pthread_mutex_init(&parameters->print_action, NULL) >= FAILED)
+		return ; // ZOB
+	if (pthread_mutex_init(&parameters->had_a_meal, NULL) >= FAILED)
 		return ; // ZOB
 }
 

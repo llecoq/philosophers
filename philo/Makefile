@@ -6,7 +6,7 @@
 #    By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/04 14:53:59 by llecoq            #+#    #+#              #
-#    Updated: 2021/10/20 16:31:57 by llecoq           ###   ########.fr        #
+#    Updated: 2021/10/20 18:13:30 by llecoq           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,8 +38,7 @@ CC		= gcc
 
 RM		= rm -rf
 
-CFLAGS	= -Wall -Wextra -Werror -g -pthread 
-# -fsanitize=thread
+CFLAGS	= -Wall -Wextra -Werror -g -pthread -fsanitize=address
 
 DIR		=	.objs/parsing\
 DIR		=	.objs/execution\

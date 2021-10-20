@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/04 14:59:21 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/20 17:22:08 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/20 18:03:14 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ enum	e_status
 	SLEEPING,
 	THINKING,
 	TIME_TO_DIE,
-	HAS_EATEN_ALL_HIS_MEALS,
 };
 
 enum	e_erros
@@ -82,7 +81,9 @@ enum	e_digit
 typedef struct s_parameters
 {
 	pthread_mutex_t	print_action;
+	pthread_mutex_t	had_a_meal;
 	int				nb_of_philosophers;
+	int				nb_of_philosophers_done_eating;
 	int				status;
 	long			time_to_die;
 	long			time_to_eat;

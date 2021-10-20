@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 18:02:40 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/20 17:23:24 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/20 18:21:56 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,15 @@ void	philo_eat(t_philosopher *philosopher)
 	oversleep_is_for_the_weak(philosopher, philosopher->parameters->time_to_eat);
 	drop_forks(philosopher);
 	if (philosopher->parameters->nb_of_meals >= IS_SET)
+	{
 		philosopher->nb_of_meals_to_eat--;
-	if (philosopher->nb_of_meals_to_eat == 0)
-		philosopher->philosopher_status = HAS_EATEN_ALL_HIS_MEALS;
+		if (philosopher->nb_of_meals_to_eat == 0)
+		{
+			pthread_mutex_lock(&philosopher->parameters->had_a_meal);
+			philosopher->parameters->nb_of_philosophers_done_eating++;
+			pthread_mutex_unlock(&philosopher->parameters->had_a_meal);
+		}
+	}
 }
 
 void	philo_sleep(t_philosopher *philosopher)

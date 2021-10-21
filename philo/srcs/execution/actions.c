@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 18:02:40 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/20 18:21:56 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/21 13:46:52 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ void	philo_eat(t_philosopher *philosopher)
 		philosopher->nb_of_meals_to_eat--;
 		if (philosopher->nb_of_meals_to_eat == 0)
 		{
-			pthread_mutex_lock(&philosopher->parameters->had_a_meal);
+			pthread_mutex_lock(&philosopher->parameters->had_a_meal_mutex);
 			philosopher->parameters->nb_of_philosophers_done_eating++;
-			pthread_mutex_unlock(&philosopher->parameters->had_a_meal);
+			pthread_mutex_unlock(&philosopher->parameters->had_a_meal_mutex);
 		}
 	}
 }

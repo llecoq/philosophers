@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 11:29:01 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/20 17:51:59 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/21 13:28:35 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,12 @@ void	print_action(t_philosopher *philosopher, int philosopher_nb, int action)
 	char	*str;
 	long	timestamp;
 
-	pthread_mutex_lock(&philosopher->parameters->print_action);
+	if (pthread_mutex_lock(&philosopher->parameters->print_action) >= FAILED)
+		return ;
 	str = NULL;
 	timestamp = get_timestamp(philosopher->parameters);
+	if (timestamp < 0 || timestamp > 999999)
+		return ;
 	philosopher->last_action_time = timestamp;
 	if (philosopher->parameters->status == DEAD)
 		return ;
@@ -40,5 +43,6 @@ void	print_action(t_philosopher *philosopher, int philosopher_nb, int action)
 		str = RED"died"RESET;
 	}
 	printf("%05ld\t%-5d %s\n", timestamp, philosopher_nb, str);
-	pthread_mutex_unlock(&philosopher->parameters->print_action);
+	if (action != DEAD)
+		pthread_mutex_unlock(&philosopher->parameters->print_action);
 }

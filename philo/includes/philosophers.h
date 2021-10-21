@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/04 14:59:21 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/20 18:03:14 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/21 13:54:13 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,11 @@ enum	e_status
 enum	e_erros
 {
 	NO_ERROR = -2,
+	SUCCESS = 0,
 	SYSCALL_ERROR = 0,
 	PARSING_ERROR = 1,
 	EXECUTION_ERROR = 2,
+	INITIALIZATION_ERROR = 3,
 	TOO_MANY_ARGS = 3,
 	TOO_FEW_ARGS = 4,
 	IS_NEGATIVE = 5,
@@ -81,7 +83,8 @@ enum	e_digit
 typedef struct s_parameters
 {
 	pthread_mutex_t	print_action;
-	pthread_mutex_t	had_a_meal;
+	pthread_mutex_t	had_a_meal_mutex;
+	pthread_mutex_t	starting_time_mutex;
 	int				nb_of_philosophers;
 	int				nb_of_philosophers_done_eating;
 	int				status;

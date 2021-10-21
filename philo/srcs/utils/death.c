@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/17 13:39:07 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/20 18:22:49 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/21 13:46:52 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,15 @@ void	life_vs_death_monitor(t_philosopher *philosopher)
 		i = -1;
 		while (++i < nb_of_philosophers)
 		{
+			pthread_mutex_lock(&philosopher->parameters->had_a_meal_mutex);
+			nb_of_philosophers_done_eating = philosopher[0].parameters->nb_of_philosophers_done_eating;
 			if (nb_of_philosophers_done_eating == nb_of_philosophers)
 			{
+				pthread_mutex_unlock(&philosopher->parameters->had_a_meal_mutex);
 				usleep(1000);
 				return ;
 			}
-			nb_of_philosophers_done_eating = philosopher[0].parameters->nb_of_philosophers_done_eating;
+			pthread_mutex_unlock(&philosopher->parameters->had_a_meal_mutex);
 			if (last_meal_time(philosopher[i], time_to_die) == TIME_TO_DIE)
 				return ;
 		}

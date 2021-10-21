@@ -6,7 +6,7 @@
 #    By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/04 14:53:59 by llecoq            #+#    #+#              #
-#    Updated: 2021/10/21 15:14:10 by llecoq           ###   ########.fr        #
+#    Updated: 2021/10/21 15:28:29 by llecoq           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ DIR		=	.objs/parsing\
 			.objs/execution\
 			.objs/utils
 
-$(OBJSPATH)%.o:		$(SRCSPATH)%.c includes/philosophers.h 
+$(OBJSPATH)%.o:		$(SRCSPATH)%.c includes/philosophers.h includes/enum.h
 			@mkdir -p $(OBJ_PATH) $(DIR)
 			$(CC) $(CFLAGS) -c $< -o $@ -I includes/
 

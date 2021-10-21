@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/04 14:59:21 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/21 13:54:13 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/21 14:42:52 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,12 @@
 # define BOLDGREEN   "\033[1m\033[32m"
 # define BOLDCYAN    "\033[1m\033[36m"
 # define BOLDWHITE   "\033[1m\033[37m"
+
+enum	e_mutex
+{
+	CREATE,
+	DETACH,
+};
 
 enum	e_status
 {
@@ -82,11 +88,11 @@ enum	e_digit
 
 typedef struct s_parameters
 {
-	pthread_mutex_t	print_action;
+	pthread_mutex_t	print_action_mutex;
 	pthread_mutex_t	had_a_meal_mutex;
 	pthread_mutex_t	starting_time_mutex;
 	int				nb_of_philosophers;
-	int				nb_of_philosophers_done_eating;
+	int				philosophers_done_eating;
 	int				status;
 	long			time_to_die;
 	long			time_to_eat;
@@ -102,7 +108,6 @@ typedef struct s_philosopher
 	pthread_mutex_t	*next_fork;
 	t_parameters	*parameters;
 	int				philosopher_nb;
-	int				philosopher_status;
 	int				nb_of_meals_to_eat;
 	int				nb_of_forks;
 	long			last_meal_time;
@@ -121,15 +126,19 @@ int		parse(t_parameters *parameters, int argc, char **argv);
 /* --------------------UTILS-------------------- */
 
 int		error(int error_type, char *arg);
-int		error_clear(t_parameters *parameters, int error_type, char *str);
-int		clear_memory(t_parameters *parameters, int error_type);
+int		error_clear(int error_type);
 int		calloc_philosopher_struct(t_parameters *parameters);
 long	ft_atoi(const char *str);
 long	get_timestamp(t_parameters *parameters);
 void	oversleep_is_for_the_weak(t_philosopher *philosopher, long sleep_time);
-void	print_action(t_philosopher *philosopher, int philosopher_nb, int action);
+void	print_action(t_philosopher *philo, int philosopher_nb, int action);
 void	set_starting_time(t_parameters *parameters);
 void	life_vs_death_monitor(t_philosopher *philosopher);
 
+/* --------------------MUTEX-------------------- */
+
+int		destroy_mutex(t_philosopher *philosopher, t_parameters *parameters);
+int		clean_exit_mutex(t_philosopher *philosopher, int i, int action);
+void	clean_unlock_mutex(t_philosopher *philosopher);
 
 #endif

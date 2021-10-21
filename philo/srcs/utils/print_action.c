@@ -6,31 +6,22 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 11:29:01 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/21 13:28:35 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/21 15:06:20 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philosophers.h"
 
-void	print_action(t_philosopher *philosopher, int philosopher_nb, int action)
+char	*format_string(t_philosopher *philo, int timestamp, int action)
 {
 	char	*str;
-	long	timestamp;
 
-	if (pthread_mutex_lock(&philosopher->parameters->print_action) >= FAILED)
-		return ;
 	str = NULL;
-	timestamp = get_timestamp(philosopher->parameters);
-	if (timestamp < 0 || timestamp > 999999)
-		return ;
-	philosopher->last_action_time = timestamp;
-	if (philosopher->parameters->status == DEAD)
-		return ;
 	if (action == HAS_TAKEN_A_FORK)
 		str = WHITE"has taken a fork"RESET;
 	else if (action == IS_EATING)
 	{
-		philosopher->last_meal_time = timestamp;
+		philo->last_meal_time = timestamp;
 		str = GREEN"is eating"RESET;
 	}
 	else if (action == IS_SLEEPING)
@@ -39,10 +30,28 @@ void	print_action(t_philosopher *philosopher, int philosopher_nb, int action)
 		str = CYAN"is thinking"RESET;
 	else if (action == DIED)
 	{
-		philosopher->parameters->status = DEAD;
+		philo->parameters->status = DEAD;
 		str = RED"died"RESET;
 	}
+	return (str);
+}
+
+void	print_action(t_philosopher *philo, int philosopher_nb, int action)
+{
+	char	*str;
+	long	timestamp;
+
+	str = NULL;
+	if (pthread_mutex_lock(&philo->parameters->print_action_mutex) >= FAILED)
+		return ;
+	timestamp = get_timestamp(philo->parameters);
+	if (timestamp == -1)
+		return ;
+	philo->last_action_time = timestamp;
+	if (philo->parameters->status == DEAD)
+		return ;
+	str = format_string(philo, timestamp, action);
 	printf("%05ld\t%-5d %s\n", timestamp, philosopher_nb, str);
 	if (action != DEAD)
-		pthread_mutex_unlock(&philosopher->parameters->print_action);
+		pthread_mutex_unlock(&philo->parameters->print_action_mutex);
 }

@@ -6,7 +6,7 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/04 15:56:50 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/16 14:06:14 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/21 15:08:24 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	parameters_are_wrong(t_parameters *parameters, int argc)
 		status = error(IS_NEGATIVE, "time_to_sleep");
 	if (argc == 6 && parameters->nb_of_meals < 0)
 		status = error(IS_NEGATIVE, "nb_of_times_each_philosopher_must_eat");
-	if (parameters->nb_of_philosophers > 400)
+	if (parameters->nb_of_philosophers > 200)
 		status = error(TOO_MANY_PHILOSOPHERS, "nb_of_philosophers");
 	return (status);
 }
@@ -75,7 +75,5 @@ int	parse(t_parameters *parameters, int argc, char **argv)
 		return (PARSING_ERROR);
 	if (parameters_are_wrong(parameters, argc))
 		return (PARSING_ERROR);
-	// if (calloc_philosopher_struct(parameters) == FAILED)
-	// 	return (PARSING_ERROR);
-	return (IS_VALID);	
+	return (IS_VALID);
 }

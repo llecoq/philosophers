@@ -6,37 +6,36 @@
 /*   By: llecoq <llecoq@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 11:53:14 by llecoq            #+#    #+#             */
-/*   Updated: 2021/10/21 13:48:31 by llecoq           ###   ########.fr       */
+/*   Updated: 2021/10/21 15:08:17 by llecoq           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philosophers.h"
 
-void	init_philosopher(t_philosopher *philo, t_parameters *parameters)
+int	init_philosopher(t_philosopher *philo, t_parameters *parameters)
 {
 	int	i;
-	int nb_of_philosophers;
+	int	nb_of_philosophers;
+
 	nb_of_philosophers = parameters->nb_of_philosophers;
 	i = -1;
-	pthread_mutex_lock(&parameters->starting_time_mutex);
+	if (pthread_mutex_lock(&parameters->starting_time_mutex) >= FAILED)
+		return (FAILED);
 	while (++i < nb_of_philosophers)
 	{
 		philo[i].parameters = parameters;
 		philo[i].philosopher_nb = i;
-		philo[i].philosopher_status = ALIVE;
 		philo[i].nb_of_meals_to_eat = parameters->nb_of_meals;
 		philo[i].nb_of_forks = 0;
 		philo[i].last_meal_time = 0;
 		philo[i].last_action_time = NOT_SET;
 		if (pthread_mutex_init(&philo[i].fork, NULL) >= FAILED)
-		{
-			//clear zooob
-			return ;
-		}
+			return (FAILED);
 	}
 	philo[--i].next_fork = &philo[0].fork;
 	while (--i >= 0)
 		philo[i].next_fork = &philo[i + 1].fork;
+	return (SUCCESS);
 }
 
 void	wait_for_all_threads(t_philosopher *philosopher)
@@ -46,18 +45,7 @@ void	wait_for_all_threads(t_philosopher *philosopher)
 	while (1)
 	{
 		if (get_timestamp(philosopher->parameters) >= 0)
-			break;
-	}
-}
-
-void	clean_unlock_mutex(t_philosopher *philosopher)
-{
-	if (philosopher->nb_of_forks == 1)
-		pthread_mutex_unlock(philosopher->next_fork);
-	else if (philosopher->nb_of_forks == 2)
-	{
-		pthread_mutex_unlock(&philosopher->fork);
-		pthread_mutex_unlock(philosopher->next_fork);
+			break ;
 	}
 }
 
@@ -78,37 +66,25 @@ void	*philosophize_or_die(void *arg)
 	return (NULL);
 }
 
-
-void	destroy_mutex(t_philosopher *philosopher, t_parameters *parameters)
-{
-	int	i;
-
-	i = -1;
-	while (++i < parameters->nb_of_philosophers)
-		if (pthread_mutex_destroy(&philosopher[i].fork) >= FAILED)
-			return ; // ZOB
-	pthread_mutex_destroy(&parameters->print_action);
-	pthread_mutex_destroy(&parameters->had_a_meal_mutex);
-	pthread_mutex_destroy(&parameters->starting_time_mutex);
-}
-
-// refaire la sync des threads ?
 int	execution(t_parameters *parameters)
 {
 	int				i;
-	t_philosopher	philo[400];
+	t_philosopher	philo[201];
 
-	init_philosopher((t_philosopher *)&philo, parameters);
+	if (init_philosopher((t_philosopher *)&philo, parameters) == FAILED)
+		return (EXECUTION_ERROR);
 	i = -1;
 	while (++i < parameters->nb_of_philosophers)
 	{
 		if (pthread_create(&philo[i].id, NULL, &philosophize_or_die, &philo[i])
 			>= FAILED)
-			return (EXECUTION_ERROR);
-		pthread_detach(philo[i].id);
+			return (clean_exit_mutex((t_philosopher *)&philo, i, CREATE));
+		if (pthread_detach(philo[i].id) >= FAILED)
+			return (clean_exit_mutex((t_philosopher *)&philo, i, DETACH));
 	}
 	set_starting_time(parameters);
 	life_vs_death_monitor((t_philosopher *)&philo);
-	destroy_mutex((t_philosopher *)&philo, parameters);
+	if (destroy_mutex((t_philosopher *)&philo, parameters) == FAILED)
+		return (EXECUTION_ERROR);
 	return (EXIT_SUCCESS);
 }

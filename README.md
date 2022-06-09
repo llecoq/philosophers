@@ -76,44 +76,31 @@ times, the simulation stops. If not specified, the simulation stops when a hilos
 ## What's included
 
 ```
-pipex
+philosophers
 ├── Makefile
+├── README.md
 ├── assets
 │   ├── en.subject.pdf
-│   ├── final grade.png
-│   └── fr.subject.pdf
+│   └── final grade.png
 ├── includes
 │   ├── enum.h
-│   └── pipex.h
-├── libft with gnl
-│   
+│   └── philosophers.h
+├── philo
 └── srcs
-    ├── executor
-    │   ├── create_redirection.c
-    │   ├── dup_redirections.c
+    ├── execution
+    │   ├── actions.c
     │   └── executor.c
-    ├── executor_utils
-    │   ├── build_file_path.c
-    │   ├── create_argv.c
-    │   ├── create_pipe.c
-    │   ├── exit_status.c
-    │   └── path_is_unset.c
     ├── main.c
     ├── parsing
-    │   ├── heredoc.c
-    │   ├── parser.c
-    │   ├── store_cmds.c
-    │   └── store_path.c
-    ├── tokenizer
-    │   ├── store_token_list.c
-    │   ├── store_tokens.c
-    │   └── tokenizer.c
+    │   └── parser.c
     └── utils
-        ├── calloc_pipex.c
-        ├── clear_memory.c
-        ├── del.c
         ├── error.c
-        └── print_list.c
+        ├── ft_atoi.c
+        ├── life_vs_death.c
+        ├── mutex.c
+        ├── print_action.c
+        ├── sleep.c
+        └── time.c
 ```
 
 ## Creators

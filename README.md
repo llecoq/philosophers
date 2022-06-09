@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://42lyon.fr/">
-    <img src="https://github.com/llecoq/philosophers/blob/master/assets/final%20grade.png" alt="philosophers" width=200 height=170>
+    <img src="https://github.com/llecoq/philosophers/blob/main/assets/final%20grade.png" alt="philosophers" width=200 height=170>
   </a>
 
   <h2 align="center">philosophers</h2>

@@ -11,7 +11,7 @@
     You will see how to create threads and you will discover mutexes.
     <br>
     <br>
-    /!\ SUBJECTS LINKED ARE DIFFERENT THAN THE ONE USED FOR THIS PROGRAM /!\
+    /!\ SUBJECT LINKED MAY DIFFER FROM THE ONE USED FOR THIS PROGRAM /!\
     <br>
     <a href="https://github.com/llecoq/philosophers/blob/master/assets/en.subject.pdf">English Subject </a>
   </p>
